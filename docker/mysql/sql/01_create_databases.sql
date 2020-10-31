@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS symfony_app;
+CREATE DATABASE symfony_app;
