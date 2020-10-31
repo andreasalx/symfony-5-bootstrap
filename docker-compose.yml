@@ -7,6 +7,8 @@ services:
       args:
         USER_ID: ${USER_ID}
         GROUP_ID: ${GROUP_ID}
+    depends_on:
+      - mysql
     volumes:
       - ${PROJECT_ROOT}/:/var/www/html
 
@@ -26,3 +28,21 @@ services:
     environment:
       HOST_USER_ID: ${USER_ID}
       HOST_GROUP_ID: ${GROUP_ID}
+
+  mysql:
+    image: mysql:5.7
+    command: [
+      '--character-set-server=utf8mb4',
+      '--collation-server=utf8mb4_unicode_ci',
+      '--default-authentication-plugin=mysql_native_password'
+    ]
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ${MYSQL_SCRIPTS_FOLDER}:/docker-entrypoint-initdb.d/
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
+volumes:
+  mysql-data:
