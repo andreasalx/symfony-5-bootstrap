@@ -1,5 +1,14 @@
 FROM php:fpm-alpine
 
+# Install dependencies
+RUN apk --update --no-cache add \
+	bash \
+	curl \
+	git \
+	unzip \
+	vim \
+	zip
+
 # Install PHP extensions
 RUN docker-php-ext-install \
 	pdo \
