@@ -17,6 +17,9 @@ RUN docker-php-ext-install \
 # Clean cache
 CMD setup-apkcache; apk cache clean
 
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 # Add user and group for application
 ARG USER_ID
 ARG GROUP_ID
