@@ -23,8 +23,11 @@ services:
       - ${NGINX_CONF_FOLDER}/sites/:/etc/nginx/sites-available
       - ${NGINX_CONF_FOLDER}/conf.d/:/etc/nginx/conf.d
     ports:
-      - "80:80"
       - "443:443"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nginx.rule=Host(`${APP_ADDRESS}`)"
+      - "traefik.http.routers.nginx.entrypoints=web"
     environment:
       HOST_USER_ID: ${USER_ID}
       HOST_GROUP_ID: ${GROUP_ID}
@@ -48,10 +51,25 @@ services:
     image: phpmyadmin/phpmyadmin
     depends_on:
       - mysql
-    ports:
-      - "8080:80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.phpmyadmin.rule=Host(`${APP_ADDRESS}.phpmyadmin`)"
+      - "traefik.http.routers.phpmyadmin.entrypoints=web"
     environment:
       PMA_HOST: mysql
+
+  traefik:
+    image: "traefik:v2.3"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:80"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
 volumes:
   mysql-data:

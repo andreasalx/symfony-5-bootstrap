@@ -18,3 +18,17 @@ After the build, when the containers are up and running you can navigate your `l
 To stop running containers use the command:
 
 `$ docker-compose stop`
+
+## Traefik
+In order to work with Traefik, the user has two available options.
+The first one is to add following lines to the machine's host file:
+
+```
+127.0.0.1 symfony_app
+127.0.0.1 symfony_app.phpmyadmin
+```
+
+`symfony_app` is the default domain address for this bootstrap project.
+
+The second one is to configure dnsmasq as described in
+[this guide](https://elearnsecurity.atlassian.net/wiki/spaces/POLICYAZIENDALI/pages/820084738/Configure+Dnsmasq+on+development+machine).
